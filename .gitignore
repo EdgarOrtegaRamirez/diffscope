@@ -4,7 +4,7 @@
 *.dll
 *.so
 *.dylib
-diffscope
+./diffscope
 test*
 
 # Test binary
