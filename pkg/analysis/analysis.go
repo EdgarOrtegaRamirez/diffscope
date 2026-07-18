@@ -37,78 +37,78 @@ func (i Impact) String() string {
 
 // Finding represents a single analysis finding.
 type Finding struct {
-	File      string   `json:"file"`
-	Function  string   `json:"function,omitempty"`
-	Line      int      `json:"line"`
-	Type      string   `json:"type"`
-	Impact    Impact   `json:"impact"`
-	Message   string   `json:"message"`
-	Severity  string   `json:"severity"`
-	Rules     []string `json:"rules,omitempty"`
+	File     string   `json:"file"`
+	Function string   `json:"function,omitempty"`
+	Line     int      `json:"line"`
+	Type     string   `json:"type"`
+	Impact   Impact   `json:"impact"`
+	Message  string   `json:"message"`
+	Severity string   `json:"severity"`
+	Rules    []string `json:"rules,omitempty"`
 }
 
 // ImpactResult holds the complete analysis of a diff.
 type ImpactResult struct {
-	Files     []*FileImpact `json:"files"`
-	Findings  []Finding     `json:"findings"`
-	Summary   Summary       `json:"summary"`
+	Files    []*FileImpact `json:"files"`
+	Findings []Finding     `json:"findings"`
+	Summary  Summary       `json:"summary"`
 }
 
 // Summary provides a high-level overview.
 type Summary struct {
-	TotalFiles     int    `json:"total_files"`
-	TotalAdditions int    `json:"total_additions"`
-	TotalDeletions int    `json:"total_deletions"`
-	TotalChanges   int    `json:"total_changes"`
-	CriticalCount  int    `json:"critical_count"`
-	HighCount      int    `json:"high_count"`
-	MediumCount    int    `json:"medium_count"`
-	LowCount       int    `json:"low_count"`
-	InfoCount      int    `json:"info_count"`
-	HasBreaking    bool   `json:"has_breaking_changes"`
-	HasSecurity    bool   `json:"has_security_issues"`
-	HasTestFiles   bool   `json:"has_test_files"`
+	TotalFiles     int  `json:"total_files"`
+	TotalAdditions int  `json:"total_additions"`
+	TotalDeletions int  `json:"total_deletions"`
+	TotalChanges   int  `json:"total_changes"`
+	CriticalCount  int  `json:"critical_count"`
+	HighCount      int  `json:"high_count"`
+	MediumCount    int  `json:"medium_count"`
+	LowCount       int  `json:"low_count"`
+	InfoCount      int  `json:"info_count"`
+	HasBreaking    bool `json:"has_breaking_changes"`
+	HasSecurity    bool `json:"has_security_issues"`
+	HasTestFiles   bool `json:"has_test_files"`
 }
 
 // FileImpact represents the impact analysis for a single file.
 type FileImpact struct {
-	Path         string    `json:"path"`
-	ChangeType   string    `json:"change_type"`
-	Additions    int       `json:"additions"`
-	Deletions    int       `json:"deletions"`
-	Functions    []FuncInfo `json:"functions"`
-	TestFile     bool      `json:"test_file"`
-	HasBreaking  bool      `json:"has_breaking_change"`
-	HasSecurity  bool      `json:"has_security_issue"`
-	HasImports   bool      `json:"has_import_changes"`
-	HasConfig    bool      `json:"has_config_change"`
-	HasDocs      bool      `json:"has_docs_change"`
+	Path        string     `json:"path"`
+	ChangeType  string     `json:"change_type"`
+	Additions   int        `json:"additions"`
+	Deletions   int        `json:"deletions"`
+	Functions   []FuncInfo `json:"functions"`
+	TestFile    bool       `json:"test_file"`
+	HasBreaking bool       `json:"has_breaking_change"`
+	HasSecurity bool       `json:"has_security_issue"`
+	HasImports  bool       `json:"has_import_changes"`
+	HasConfig   bool       `json:"has_config_change"`
+	HasDocs     bool       `json:"has_docs_change"`
 }
 
 // FuncInfo represents information about a changed function.
 type FuncInfo struct {
-	Name     string `json:"name"`
-	Line     int    `json:"line"`
-	Added    int    `json:"added"`
-	Deleted  int    `json:"deleted"`
-	IsNew    bool   `json:"is_new"`
-	IsRemoved bool  `json:"is_removed"`
+	Name      string `json:"name"`
+	Line      int    `json:"line"`
+	Added     int    `json:"added"`
+	Deleted   int    `json:"deleted"`
+	IsNew     bool   `json:"is_new"`
+	IsRemoved bool   `json:"is_removed"`
 }
 
 // Analyzer analyzes diffs for impact.
 type Analyzer struct {
 	// Language-specific analyzers
-	goAnalyzer     *GoAnalyzer
-	pyAnalyzer     *PythonAnalyzer
-	tsAnalyzer     *TypeScriptAnalyzer
+	goAnalyzer *GoAnalyzer
+	pyAnalyzer *PythonAnalyzer
+	tsAnalyzer *TypeScriptAnalyzer
 }
 
 // NewAnalyzer creates a new Analyzer.
 func NewAnalyzer() *Analyzer {
 	return &Analyzer{
-		goAnalyzer:  &GoAnalyzer{},
-		pyAnalyzer:  &PythonAnalyzer{},
-		tsAnalyzer:  &TypeScriptAnalyzer{},
+		goAnalyzer: &GoAnalyzer{},
+		pyAnalyzer: &PythonAnalyzer{},
+		tsAnalyzer: &TypeScriptAnalyzer{},
 	}
 }
 
@@ -200,39 +200,39 @@ func (a *Analyzer) checkSecurity(fd *diff.FileDiff) []Finding {
 		// Check for hardcoded secrets
 		if isHardcodedSecret(content) {
 			findings = append(findings, Finding{
-				File:    fd.NewPath,
-				Line:    l.LineNumber,
-				Type:    "security",
-				Impact:  High,
+				File:     fd.NewPath,
+				Line:     l.LineNumber,
+				Type:     "security",
+				Impact:   High,
 				Severity: "high",
-				Message:   "Potential hardcoded secret detected",
-				Rules:     []string{"hardcoded-secret"},
+				Message:  "Potential hardcoded secret detected",
+				Rules:    []string{"hardcoded-secret"},
 			})
 		}
 
 		// Check for eval/exec patterns
 		if containsPattern(content, `eval\(`) || containsPattern(content, `exec\(`) {
 			findings = append(findings, Finding{
-				File:    fd.NewPath,
-				Line:    l.LineNumber,
-				Type:    "security",
-				Impact:  Critical,
+				File:     fd.NewPath,
+				Line:     l.LineNumber,
+				Type:     "security",
+				Impact:   Critical,
 				Severity: "critical",
-				Message:   "Use of eval/exec detected",
-				Rules:     []string{"unsafe-eval"},
+				Message:  "Use of eval/exec detected",
+				Rules:    []string{"unsafe-eval"},
 			})
 		}
 
 		// Check for SQL injection patterns
 		if containsPattern(content, `SQL\s*\(`) || containsPattern(content, `query\s*\(`) {
 			findings = append(findings, Finding{
-				File:    fd.NewPath,
-				Line:    l.LineNumber,
-				Type:    "security",
-				Impact:  High,
+				File:     fd.NewPath,
+				Line:     l.LineNumber,
+				Type:     "security",
+				Impact:   High,
 				Severity: "high",
-				Message:   "Potential SQL query — ensure parameterized queries are used",
-				Rules:     []string{"sql-injection-risk"},
+				Message:  "Potential SQL query — ensure parameterized queries are used",
+				Rules:    []string{"sql-injection-risk"},
 			})
 		}
 	}
@@ -254,26 +254,26 @@ func (a *Analyzer) checkBreakingChanges(fd *diff.FileDiff) []Finding {
 		// Check for removed exported functions/types
 		if isExportedSymbol(content) {
 			findings = append(findings, Finding{
-				File:    fd.NewPath,
-				Line:    l.LineNumber,
-				Type:    "breaking",
-				Impact:  High,
+				File:     fd.NewPath,
+				Line:     l.LineNumber,
+				Type:     "breaking",
+				Impact:   High,
 				Severity: "high",
-				Message:   "Removed exported symbol — potential breaking change",
-				Rules:     []string{"removed-export"},
+				Message:  "Removed exported symbol — potential breaking change",
+				Rules:    []string{"removed-export"},
 			})
 		}
 
 		// Check for removed interface methods
 		if containsPattern(content, `interface\s*\{`) || containsPattern(content, `interface\s*\{`) {
 			findings = append(findings, Finding{
-				File:    fd.NewPath,
-				Line:    l.LineNumber,
-				Type:    "breaking",
-				Impact:  Critical,
+				File:     fd.NewPath,
+				Line:     l.LineNumber,
+				Type:     "breaking",
+				Impact:   Critical,
 				Severity: "critical",
-				Message:   "Interface definition changed — may break implementations",
-				Rules:     []string{"interface-change"},
+				Message:  "Interface definition changed — may break implementations",
+				Rules:    []string{"interface-change"},
 			})
 		}
 	}

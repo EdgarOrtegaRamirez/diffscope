@@ -31,32 +31,32 @@ func (ct ChangeType) String() string {
 
 // Line represents a single line in a diff.
 type Line struct {
-	LineNumber int       // Line number in the new file (0 for deleted file lines)
-	OldNumber  int       // Line number in the old file (0 for added file lines)
-	Content    string    // The line content (with +/- prefix removed)
-	Prefix     string    // The diff prefix: " ", "+", "-", "@"
-	HunkHeader string    // The hunk header if this is a hunk line
-	IsHunk     bool      // Whether this line is a hunk header (@@ ...)
-	IsHeader   bool      // Whether this line is a diff header (diff --git ...)
-	IsNewFile  bool      // Whether this line is --- a/file
-	IsOldFile  bool      // Whether this line is +++ b/file
+	LineNumber int    // Line number in the new file (0 for deleted file lines)
+	OldNumber  int    // Line number in the old file (0 for added file lines)
+	Content    string // The line content (with +/- prefix removed)
+	Prefix     string // The diff prefix: " ", "+", "-", "@"
+	HunkHeader string // The hunk header if this is a hunk line
+	IsHunk     bool   // Whether this line is a hunk header (@@ ...)
+	IsHeader   bool   // Whether this line is a diff header (diff --git ...)
+	IsNewFile  bool   // Whether this line is --- a/file
+	IsOldFile  bool   // Whether this line is +++ b/file
 }
 
 // FileDiff represents the diff for a single file.
 type FileDiff struct {
-	OldPath    string       // Original file path (before rename)
-	NewPath    string       // New file path (after rename)
-	OldMode    string       // Old file mode (e.g., 100644)
-	NewMode    string       // New file mode
-	ChangeType ChangeType   // Type of change
-	Added      int          // Number of lines added
-	Deleted    int          // Number of lines deleted
-	Lines      []Line       // All lines in the diff
-	Index      int          // Line index in the full diff
-	IsBinary   bool         // Whether the file is binary
-	IsRename   bool         // Whether this is a rename
-	RenameTo   string       // New path for renames
-	RenameFrom string       // Old path for renames
+	OldPath    string     // Original file path (before rename)
+	NewPath    string     // New file path (after rename)
+	OldMode    string     // Old file mode (e.g., 100644)
+	NewMode    string     // New file mode
+	ChangeType ChangeType // Type of change
+	Added      int        // Number of lines added
+	Deleted    int        // Number of lines deleted
+	Lines      []Line     // All lines in the diff
+	Index      int        // Line index in the full diff
+	IsBinary   bool       // Whether the file is binary
+	IsRename   bool       // Whether this is a rename
+	RenameTo   string     // New path for renames
+	RenameFrom string     // Old path for renames
 }
 
 // Diff represents the full repository diff.

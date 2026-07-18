@@ -9,20 +9,20 @@ import (
 
 // Score represents the overall impact score (0-100).
 type Score struct {
-	Overall   int            `json:"overall"`
-	Severity  SeverityLevel  `json:"severity"`
-	Details   ScoreDetails   `json:"details"`
+	Overall  int           `json:"overall"`
+	Severity SeverityLevel `json:"severity"`
+	Details  ScoreDetails  `json:"details"`
 }
 
 // SeverityLevel represents the severity category.
 type SeverityLevel string
 
 const (
-	Safe       SeverityLevel = "safe"
-	Minor      SeverityLevel = "minor"
-	Moderate   SeverityLevel = "moderate"
-	Significant  SeverityLevel = "significant"
-	Critical   SeverityLevel = "critical"
+	Safe        SeverityLevel = "safe"
+	Minor       SeverityLevel = "minor"
+	Moderate    SeverityLevel = "moderate"
+	Significant SeverityLevel = "significant"
+	Critical    SeverityLevel = "critical"
 )
 
 // ScoreDetails contains the breakdown of the score.
@@ -67,9 +67,9 @@ func (s *Scorer) ScoreResult(result *analysis.ImpactResult) *Score {
 	overall := s.weightedScore(details)
 
 	return &Score{
-		Overall:   int(math.Round(overall)),
-		Severity:  severityFromScore(int(math.Round(overall))),
-		Details:   details,
+		Overall:  int(math.Round(overall)),
+		Severity: severityFromScore(int(math.Round(overall))),
+		Details:  details,
 	}
 }
 
@@ -81,7 +81,7 @@ func (s *Scorer) calculateSizeScore(result *analysis.ImpactResult) float64 {
 	}
 
 	// Logarithmic scaling: more changes = higher score, but diminishing returns
-	score := math.Log10(float64(total) + 1) * 20
+	score := math.Log10(float64(total)+1) * 20
 	if score > 40 {
 		score = 40
 	}

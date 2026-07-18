@@ -15,8 +15,8 @@ import (
 type Format string
 
 const (
-	FormatText  Format = "text"
-	FormatJSON  Format = "json"
+	FormatText     Format = "text"
+	FormatJSON     Format = "json"
 	FormatMarkdown Format = "markdown"
 )
 
@@ -109,10 +109,10 @@ func (r *Renderer) renderText(result *analysis.ImpactResult, score *scoring.Scor
 // renderJSON renders the result as JSON.
 func (r *Renderer) renderJSON(result *analysis.ImpactResult, score *scoring.Score) error {
 	output := struct {
-		Summary analysis.Summary `json:"summary"`
-		Files   []*analysis.FileImpact `json:"files"`
-		Findings []analysis.Finding `json:"findings"`
-		Score   *scoring.Score `json:"score,omitempty"`
+		Summary  analysis.Summary       `json:"summary"`
+		Files    []*analysis.FileImpact `json:"files"`
+		Findings []analysis.Finding     `json:"findings"`
+		Score    *scoring.Score         `json:"score,omitempty"`
 	}{
 		Summary:  result.Summary,
 		Files:    result.Files,
